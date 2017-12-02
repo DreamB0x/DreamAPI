@@ -3,7 +3,7 @@
 
 import json
 
-class Config():
+class Config(object):
 
     def __init__(self):
         self.setUpConfig()

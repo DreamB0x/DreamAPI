@@ -5,6 +5,7 @@ import json
 import requests
 
 from config.config import Config
+
 class Authentication(object):
 
     def __init__(self, uid, auth_code):
