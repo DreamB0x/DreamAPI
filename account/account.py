@@ -1,6 +1,7 @@
 #!usr/bin/env python
 #-*- coding: utf-8 -*-
 
+import json
 import requests
 
 from config.config import Config
@@ -15,8 +16,13 @@ class Account(object):
             "developer-key": config.get("developer_key")
         }
 
+    # Gets user balance - (current, avaiable limit, current limit)
     def getBalance(self, version="v1"):
         ori_response = requests.get(self.base_url + "/accounts/v1/balance", headers=self.headers)
         response = ori_response.content
 
-        return response 
+        return response
+
+    def canBuyUsingDebit(self, product):
+        print "produto: {}".format(product.value)
+        return float(json.loads(self.getBalance())["current_limit"]) >= product.value
