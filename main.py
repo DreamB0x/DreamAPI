@@ -79,6 +79,9 @@ def canBuy():
         "buy_classification": customer.predictUserType()
     })
 
+############################################
+#           PRODUCT INFO
+############################################
 @app.route("/product/info", methods=["POST"])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def productInfo():
