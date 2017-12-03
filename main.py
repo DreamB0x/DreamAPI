@@ -14,41 +14,50 @@ app = Flask( __name__ )
 cors = CORS(app, resources={r"/foo": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route("/getToken", methods=["POST"])
+token = "Bearer MzVjNTdhMTAtZDc5Ni0xMWU3LWJjNTEtMDA1MDU2OWE3MzA1OmV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUowZVhCbElqb2lUMEYxZEdnaUxDSnBZWFFpT2pFMU1USXlOREkxT1Rjc0ltVjRjQ0k2TVRVeE1qWTNORFU1Tnl3aVlYVmtJam9pTldJMFpqZG1PR1lpTENKcGMzTWlPaUphZFhBdWJXVWdSMkYwWlhkaGVTSXNJbk4xWWlJNklqTTFZelUzWVRFd0xXUTNPVFl0TVRGbE55MWlZelV4TFRBd05UQTFOamxoTnpNd05TSXNJbXAwYVNJNklqTm1ZVFkxTUdVd0xXUTNPVFl0TVRGbE55MWhOMk13TFdNeE56WXlaRFl3TlRRME5pSjkuUmEzTGY2VmtEM3QwdG9wRFoxSHBwRWt2OTVzNUVWRjRDU2hSdTNUcEFHTQ=="
+
+@app.route("/oauth2/get/token", methods=["GET"])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def authenticate():
-    uid = request.form["uid"]
-    auth_code = request.form["auth_code"]
+    uid = request.args["uid"]
+    auth_code = request.args["auth_code"]
     token = Authentication(uid, auth_code)
 
     return token.getOAuth2Token()
 
-@app.route("/getBalance", methods=["POST"])
+@app.route("/user/balance", methods=["GET"])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def getBalance():
     # token = request.form["ori_token"]
-    token = "Bearer MzVjNTdhMTAtZDc5Ni0xMWU3LWJjNTEtMDA1MDU2OWE3MzA1OmV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUowZVhCbElqb2lUMEYxZEdnaUxDSnBZWFFpT2pFMU1USXlOREkxT1Rjc0ltVjRjQ0k2TVRVeE1qWTNORFU1Tnl3aVlYVmtJam9pTldJMFpqZG1PR1lpTENKcGMzTWlPaUphZFhBdWJXVWdSMkYwWlhkaGVTSXNJbk4xWWlJNklqTTFZelUzWVRFd0xXUTNPVFl0TVRGbE55MWlZelV4TFRBd05UQTFOamxoTnpNd05TSXNJbXAwYVNJNklqTm1ZVFkxTUdVd0xXUTNPVFl0TVRGbE55MWhOMk13TFdNeE56WXlaRFl3TlRRME5pSjkuUmEzTGY2VmtEM3QwdG9wRFoxSHBwRWt2OTVzNUVWRjRDU2hSdTNUcEFHTQ=="
     customer = Account(token)
 
     return customer.getBalance()
 
-@app.route("/classifyUser", methods=["GET"])
+@app.route("/user/classify", methods=["GET"])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def classifyUser():
     # token = request.form["ori_token"]
-    token = "Bearer MzVjNTdhMTAtZDc5Ni0xMWU3LWJjNTEtMDA1MDU2OWE3MzA1OmV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUowZVhCbElqb2lUMEYxZEdnaUxDSnBZWFFpT2pFMU1USXlOREkxT1Rjc0ltVjRjQ0k2TVRVeE1qWTNORFU1Tnl3aVlYVmtJam9pTldJMFpqZG1PR1lpTENKcGMzTWlPaUphZFhBdWJXVWdSMkYwWlhkaGVTSXNJbk4xWWlJNklqTTFZelUzWVRFd0xXUTNPVFl0TVRGbE55MWlZelV4TFRBd05UQTFOamxoTnpNd05TSXNJbXAwYVNJNklqTm1ZVFkxTUdVd0xXUTNPVFl0TVRGbE55MWhOMk13TFdNeE56WXlaRFl3TlRRME5pSjkuUmEzTGY2VmtEM3QwdG9wRFoxSHBwRWt2OTVzNUVWRjRDU2hSdTNUcEFHTQ=="
     customer = Account(token)
 
     return jsonify({
         "customer.category": customer.predictUserType()
     })
 
-@app.route("/canBuy", methods=["POST"])
+@app.route("/user/balance/rewards", methods=["GET"])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def rewardBalance():
+    # token = request.form["ori_token"]
+    customer = Account(token)
+
+    return jsonify({
+        "reward.balance": customer.getRewardBalance()
+    })
+
+@app.route("/user/canbuyproduct", methods=["POST"])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def canBuy():
     # token = request.form["ori_token"]
     product_url = request.form["product_url"]
-    token = "Bearer MzVjNTdhMTAtZDc5Ni0xMWU3LWJjNTEtMDA1MDU2OWE3MzA1OmV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUowZVhCbElqb2lUMEYxZEdnaUxDSnBZWFFpT2pFMU1USXlOREkxT1Rjc0ltVjRjQ0k2TVRVeE1qWTNORFU1Tnl3aVlYVmtJam9pTldJMFpqZG1PR1lpTENKcGMzTWlPaUphZFhBdWJXVWdSMkYwWlhkaGVTSXNJbk4xWWlJNklqTTFZelUzWVRFd0xXUTNPVFl0TVRGbE55MWlZelV4TFRBd05UQTFOamxoTnpNd05TSXNJbXAwYVNJNklqTm1ZVFkxTUdVd0xXUTNPVFl0TVRGbE55MWhOMk13TFdNeE56WXlaRFl3TlRRME5pSjkuUmEzTGY2VmtEM3QwdG9wRFoxSHBwRWt2OTVzNUVWRjRDU2hSdTNUcEFHTQ=="
     customer, product = Account(token), Product(product_url)
 
     if customer.canBuyUsingDebit(product):
@@ -59,11 +68,9 @@ def canBuy():
         message = "user cannot buy this product"
 
     return jsonify({
-        "status": status,
-        "message": message
+        "buy.status": status,
+        "buy.message": message
     })
-
-
 
 if __name__ == '__main__':
     app.run()
