@@ -21,8 +21,10 @@ class Account(object):
     def getBalance(self, version="v1"):
         ori_response = requests.get(self.base_url + "/accounts/v1/balance", headers=self.headers)
         response = ori_response.content
-
-        return response
+        response_dict = json.loads(response)
+        response_dict["current_balance"] = float(response_dict["current_balance"]) 
+        
+        return response_dict 
 
     def getRewardBalance(self):
         ori_response = requests.get(self.base_url + "/rewards/v1/balance", headers=self.headers)
@@ -32,8 +34,8 @@ class Account(object):
 
     # Checks if user can buy product
     def canBuyUsingDebit(self, product):
-        print "produto: {}".format(product.value)
-        return float(json.loads(self.getBalance())["current_balance"]) >= product.value
+        balance = self.getBalance()["current_balance"]
+        return  balance >= product.value
 
     # Gets history of transactions
     def getTransactions(self):
