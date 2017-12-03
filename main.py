@@ -98,5 +98,15 @@ def productInfo():
     })
 
 
+############################################
+#         INVESTMENTS SUMMARY
+############################################
+@app.route("/user/investments", methods=["GET"])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def investmentsSummary():
+    customer = Account(token)
+    return jsonify(customer.getInvestmentsSummary())
+
+
 if __name__ == '__main__':
     app.run()

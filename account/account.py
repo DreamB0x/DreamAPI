@@ -37,6 +37,13 @@ class Account(object):
         balance = self.getBalance()["current_balance"]
         return  balance >= product.value
 
+    # User's investments summary
+    def getInvestmentsSummary(self):
+        response = requests.get(self.base_url + "/investments/v1/portfolio-summary", headers=self.headers)
+        response = json.loads(response.content)
+
+        return response
+
     # Gets history of transactions
     def getTransactions(self):
         response = requests.get(self.base_url + "/accounts/v1/transaction-history", headers=self.headers)
