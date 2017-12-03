@@ -3,6 +3,7 @@
 
 import json
 import requests
+from NB.naivebayes import NaiveBayes
 
 from config.config import Config
 
@@ -23,6 +24,21 @@ class Account(object):
 
         return response
 
+    # Checks if user can buy product
     def canBuyUsingDebit(self, product):
         print "produto: {}".format(product.value)
         return float(json.loads(self.getBalance())["current_limit"]) >= product.value
+
+    # Gets history of transactions
+    def getTransactions(self):
+        response = requests.get(self.base_url + "/accounts/v1/transaction-history", headers=self.headers)
+        transactions = json.loads(response.content)
+        
+        return transactions
+
+    # Classifies user type
+    def predictUserType(self):
+        transactions = self.getTransactions()
+        nbayes = NaiveBayes(transactions)
+
+        return str(nbayes.classify())
