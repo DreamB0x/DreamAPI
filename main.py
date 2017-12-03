@@ -73,12 +73,25 @@ def rewardBalance():
 def canBuy():
     # token = request.form["ori_token"]
     product_url = request.form["product_url"]
-    customer, product = Account(token), Product(product_url)
 
     return jsonify({
         "buy_status": customer.canBuyUsingDebit(product),
         "buy_classification": customer.predictUserType()
     })
+
+@app.route("/product/info", methods=["POST"])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def productInfo():
+    product_url = request.form["product_url"]
+    product = Product(product_url)
+    plots = product.getMonthlyPlots()
+
+    return jsonify({
+        "product_value": product.value,
+        "product_x": plots[0],
+        "product_monthly": plots[1]
+    })
+
 
 if __name__ == '__main__':
     app.run()

@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import re
+import random
 import requests
 
 class Product(object):
@@ -16,3 +17,7 @@ class Product(object):
         formatted_value = result.group(0)[2:].replace(".", "").replace(",", ".")
 
         return float(formatted_value)
+
+    def getMonthlyPlots(self):
+        plots = random.randint(1, 12)
+        return plots, round((self.value / plots), 2)
