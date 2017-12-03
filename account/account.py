@@ -24,10 +24,16 @@ class Account(object):
 
         return response
 
+    def getRewardBalance(self):
+        ori_response = requests.get(self.base_url + "/rewards/v1/balance", headers=self.headers)
+        response = json.loads(ori_response.content)["current_balance"]
+
+        return float(response)
+
     # Checks if user can buy product
     def canBuyUsingDebit(self, product):
         print "produto: {}".format(product.value)
-        return float(json.loads(self.getBalance())["current_limit"]) >= product.value
+        return float(json.loads(self.getBalance())["current_balance"]) >= product.value
 
     # Gets history of transactions
     def getTransactions(self):
