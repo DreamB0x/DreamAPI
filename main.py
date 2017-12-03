@@ -72,6 +72,7 @@ def rewardBalance():
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def canBuy():
     # token = request.form["ori_token"]
+    customer = Account(token)
     product_url = request.form["product_url"]
 
     return jsonify({
