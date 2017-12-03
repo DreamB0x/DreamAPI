@@ -37,7 +37,7 @@ def getBalance():
     # token = request.form["ori_token"]
     customer = Account(token)
 
-    return customer.getBalance()
+    return jsonify(customer.getBalance())
 
 ############################################
 #               USER CLASSIFY
@@ -49,7 +49,7 @@ def classifyUser():
     customer = Account(token)
 
     return jsonify({
-        "customer.category": customer.predictUserType()
+        "customer_category": customer.predictUserType()
     })
 
 ############################################
@@ -62,7 +62,7 @@ def rewardBalance():
     customer = Account(token)
 
     return jsonify({
-        "reward.balance": customer.getRewardBalance()
+        "reward_balance": customer.getRewardBalance()
     })
 
 ############################################
@@ -75,16 +75,9 @@ def canBuy():
     product_url = request.form["product_url"]
     customer, product = Account(token), Product(product_url)
 
-    if customer.canBuyUsingDebit(product):
-        status = 202
-        message = "user can buy this product"
-    else:
-        status = 203
-        message = "user cannot buy this product"
-
     return jsonify({
-        "buy.status": status,
-        "buy.message": message
+        "buy_status": customer.canBuyUsingDebit(product),
+        "buy_classification": customer.predictUserType()
     })
 
 if __name__ == '__main__':
